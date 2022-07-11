@@ -28,11 +28,8 @@ function drawnBoardGame(){
     // Lines of Tic Tac Toe
     drawnLine(canvas.width/3, 0, canvas.width/3, canvas.height, 'black');
     drawnLine(canvas.width/3*2, 0, canvas.width/3*2, canvas.height, 'black');
-
     drawnLine(0, canvas.height/3, canvas.width, canvas.height/3, 'black');
     drawnLine(0, canvas.width/3*2, canvas.width, canvas.height/3*2, 'black');
-
-
 
 }
 
