@@ -38,7 +38,7 @@ function drawn_Setup_BoardGame(){
 function drawBoardChanges(column, row, timeOf){
     let x = column * canvas.width/3;
     let y = row * canvas.height/3;
-    write_text(x + canvas.width/7.89, y + canvas.height/5, timeOf, 'black', '50px', 'Arial');
+    write_text(x + canvas.width/8, y + canvas.height/5, timeOf, 'black', '50px', 'Arial');
 }
 
 function clearGameBoard(){
