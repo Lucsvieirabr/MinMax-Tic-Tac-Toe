@@ -24,10 +24,9 @@ function playerClicked(event){
     if(Clickedcell.ctx == ""){
         board[Clickedcell.column][Clickedcell.row] = timeOf;
         drawBoardChanges(Clickedcell.column, Clickedcell.row, timeOf);
-        if(checkWinner()){
-            alert(timeOf + " is the winner!");
+        if(!checkWinner()){
+            timeOf = (timeOf == "X") ? "O" : "X";
         }
-        timeOf = (timeOf == "X") ? "O" : "X";
     }
     
 }
