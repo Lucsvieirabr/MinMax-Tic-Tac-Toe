@@ -1,3 +1,36 @@
+.scorecontainer{
+    display: grid;
+    width: 240px;
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 10px;
+    box-shadow: inset 0 0 0.2px #000000;
+    background-color: rgb(255, 255, 255);
+    position: absolute;
+    font-family: 'Roboto', sans-serif;
+    /*Put it on center*/
+    left: 20%;
+    top: 55%;
+    transform: translate(-50%, -50%);
+    /*Make it responsive*/
+    @media screen and (max-width: 600px){
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        transform: translate(0, 0);
+    }
+
+}
+
+.player{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+    align-items: center;
+}
+
+
 .canvas_div{
     display: grid;
     grid-template-rows: auto;
@@ -15,8 +48,11 @@
     justify-content: center;
     align-items: center;
     margin-top: 10px;
-    border-radius: 15%;
-    background-color: rgba(5, 242, 255, 0.823);
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
     color: black;
-    border: none;
+    font-size: 0.8em;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    border: 1.5px solid black;
 }

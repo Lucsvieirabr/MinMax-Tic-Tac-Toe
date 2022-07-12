@@ -11,10 +11,23 @@
     <script src='main.js'></script>
 </head>
 <body>
+    <div class="scorecontainer">
+        <h1>Score</h1>
+        <div class="scores">
+            <div class="player">
+                <h2>X</h2>
+                <p id="scoreX">0</p>
+            </div>
+            <div class="player">
+                <h2>O</h2>
+                <p id="scoreO">0</p>
+            </div>
+        </div>
+    </div>
     <div class="canvas_div">
         <h1>Tic Tac Toe</h1>
         <canvas id="gameCanvas"></canvas>
-        <button onclick="clearGameBoard()" id="resetBt" style="width: 72px;height: 42px;"> Reset</button>
+        <button onclick="clearGameBoard()" id="resetBt" style="width: 85px;height: 35px;"> Reset</button>
     </div>
 </body>
 </html>
