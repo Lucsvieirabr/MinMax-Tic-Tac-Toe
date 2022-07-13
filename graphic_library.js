@@ -50,3 +50,9 @@ function clearGameBoard(){
         ["", "", ""],
     ];
 }
+
+function clearScore(){
+    changeScore("X", true);
+    changeScore("O", true);
+}
+

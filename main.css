@@ -44,7 +44,7 @@
     color: rgb(0, 0, 0);
 }
 
-#resetBt{
+.resetBt{
     justify-content: center;
     align-items: center;
     margin-top: 10px;

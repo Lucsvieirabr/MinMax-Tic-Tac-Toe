@@ -88,12 +88,12 @@ function checkDiagonals(){
     }
     return false;
 }
-function changeScore(winner){
-    if(winner == "X"){
-        scoreX++;
+function changeScore(player, reset){
+    if(player == "X"){
+        scoreX = reset? 0 : scoreX + 1;
         document.getElementById("scoreX").innerHTML = scoreX;
     }else{
-        scoreO++;
+        scoreO = reset? 0 : scoreO + 1;
         document.getElementById("scoreO").innerHTML = scoreO;
     }
 }
