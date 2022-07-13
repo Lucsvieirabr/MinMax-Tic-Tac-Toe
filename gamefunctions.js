@@ -22,15 +22,23 @@ function playerClicked(event){
     let mouseCord = getMouseCord(event);
     let Clickedcell = getClickedCell(mouseCord.x, mouseCord.y);
     if(Clickedcell.ctx == ""){
-        board[Clickedcell.column][Clickedcell.row] = timeOf;
-        drawBoardChanges(Clickedcell.column, Clickedcell.row, timeOf);
-        if(checkWinner()){
-           hasWon = true;
-           return; 
-        }
-        timeOf = (timeOf == "X") ? "O" : "X";
+        make_move(Clickedcell.column, Clickedcell.row, timeOf);
+    }  
+}
+
+function make_move(column, row, ctx){
+    changeClickedCell_Ctx(column, row, ctx);
+    drawBoardChanges(column, row, ctx);
+    if(checkWinner()){
+        hasWon = true;
+        return;
     }
-    
+    timeOf = (timeOf == "X") ? "O" : "X";
+}
+
+
+function changeClickedCell_Ctx(column, row, ctx){
+    board[column][row] = ctx;
 }
 
 function checkWinner(){
