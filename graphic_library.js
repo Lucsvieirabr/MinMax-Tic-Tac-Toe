@@ -49,6 +49,7 @@ function clearGameBoard(){
         ["", "", ""],
         ["", "", ""],
     ];
+    timeOf = "X";
 }
 
 function clearScore(){

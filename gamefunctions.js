@@ -4,6 +4,7 @@ let timeOf = "X";
 let scoreX = 0;
 let scoreO = 0;
 let hasWon = false;
+let winnerLineCord;
 function getMouseCord(event){
     let mouseX = event.clientX - canvas.offsetLeft;
     let mouseY = event.clientY - canvas.offsetTop;
@@ -31,6 +32,9 @@ function make_move(column, row, ctx){
     drawBoardChanges(column, row, ctx);
     if(checkWinner()){
         hasWon = true;
+        changeScore(timeOf);
+        drawnLine(winnerLineCord[0], winnerLineCord[1], winnerLineCord[2], winnerLineCord[3], 'red', 4);
+        timeOf = "X";
         return;
     }
     timeOf = (timeOf == "X") ? "O" : "X";
@@ -45,10 +49,7 @@ function checkWinner(){
     let winOnRow = checkRows();
     let winOnColumn =checkColumns();
     let winOnDiagonal = checkDiagonals();
-    if(winOnRow || winOnColumn || winOnDiagonal){
-        changeScore(timeOf);
-        return true;
-    }
+    return winOnRow || winOnColumn || winOnDiagonal;
 }
 
 function checkColumns(){
@@ -57,7 +58,7 @@ function checkColumns(){
             let x1 = hCell/2 + i * hCell;
             let y1 = wCell/2;
             let y2 = hCell/2 *5;
-            drawnLine(x1, y1, x1, y2, 'red', 4);
+            winnerLineCord =[x1, y1, x1, y2]
             return true;
         }
     }
@@ -70,7 +71,7 @@ function checkRows(){
             let x1 = wCell/2;
             let y1 = hCell/2 + i * hCell;
             let x2 = 2.5 * wCell;
-            drawnLine(x1, y1, x2, y1, 'red',4);
+            winnerLineCord = [x1, y1, x2, y1]
             return true
         }
     }
@@ -83,7 +84,7 @@ function checkDiagonals(){
         let y1 = hCell/2;
         let x2 = wCell *2.5;
         let y2 = hCell * 2.5;
-        drawnLine(x1, y1, x2, y2, 'red',4);
+        winnerLineCord = [x1, y1, x2, y2];
         return true;
     }
     if(board[1][1] == board[0][2] && board[1][1] == board[2][0] && board[1][1] != ""){
@@ -91,7 +92,7 @@ function checkDiagonals(){
         let y1 = hCell/2;
         let x2 = wCell/2;
         let y2 = hCell * 2.5;
-        drawnLine(x1, y1, x2, y2, 'red',4);
+        winnerLineCord = [x1, y1, x2, y2];
         return true;
     }
     return false;
