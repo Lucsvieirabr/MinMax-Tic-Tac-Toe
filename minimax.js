@@ -1,5 +1,5 @@
 function makeiamove() {
-  minimax(board, 0, [], timeOf);
+  randomPlayer(board, 0, [], timeOf);
 }
 function randomPlayer(IAboard, score, moves, player){
   let possibleMoves = [];

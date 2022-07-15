@@ -25,7 +25,7 @@ function playerClicked(event){
     if(Clickedcell.ctx == ""){
         make_move(Clickedcell.column, Clickedcell.row, timeOf);
     }  
-   makeiamove();
+   if(!hasWon){makeiamove();}
 }
 
 function make_move(column, row, ctx){
