@@ -32,6 +32,7 @@ function playerClicked(event){
 function make_move(column, row, ctx){
     changeClickedCell_Ctx(column, row, ctx);
     drawBoardChanges(column, row, ctx);
+    console.log(board);
     if(checkWinner(board)){
         hasWon = true;
         changeScore(timeOf);
