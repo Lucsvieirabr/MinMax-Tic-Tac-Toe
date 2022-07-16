@@ -1,6 +1,5 @@
 function makeiamove() {
-  let IABoard = [board[0], board[1], board[2]];
-  let move = minimax(IABoard);
+  let move = minimax(board);
   make_move(move[0], move[1], "O");
 }
 function getPossiblesMoves(gameBoard) {
