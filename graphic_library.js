@@ -43,7 +43,6 @@ function drawBoardChanges(column, row, timeOf){
 
 function clearGameBoard(){
     hasWon = false;
-    winner = "";
     drawn_Setup_BoardGame();
     board = [
         ["", "", ""],
