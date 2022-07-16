@@ -28,20 +28,20 @@ function score_all_moves(gameBoard, moves, player) {
   for(let i = 0; i < moves.length; i++){
     gameBoard[moves[i][0]][moves[i][1]] = player;
     if(!hasPossibleMoves(gameBoard)){
+      console.log(gameBoard)
       let score = getScore(gameBoard);
       scoredMoves.push([score]);
       gameBoard[moves[i][0]][moves[i][1]] = "";
     }else{
       let newmoves = getPossiblesMoves(gameBoard);
-      score_all_moves(gameBoard, newmoves, (player == "X") ? "O" : "X");  
-    } 
+      score_all_moves(gameBoard, newmoves, (player == "X") ? "O" : "X");
+      
+    }
+    
   }
   return scoredMoves;
 }
 function hasPossibleMoves(gameBoard){
-  if(checkWinner(gameBoard)){
-    return false;
-  }
   let possibleMoves = getPossiblesMoves(gameBoard);
   if(possibleMoves.length == 0){
     return false;
@@ -62,6 +62,7 @@ function getBestMove(moves, scoredMoves) {
 function minimax(gameBoard){
   let possibleMoves = getPossiblesMoves(gameBoard);
   let scoredMoves = score_all_moves(gameBoard, possibleMoves, "O");
+  console.log(scoredMoves);
   let bestMove = getBestMove(possibleMoves, scoredMoves);
   return bestMove;
 }
