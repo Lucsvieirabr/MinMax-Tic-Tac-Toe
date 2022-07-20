@@ -3,18 +3,45 @@ function makeiamove() {
   //pegar todos os possíveis gameboards
   //Fazer o score de cada gameboard
   //Pegar o gameboard com o maior score
-  let possiblesmoves = getPossibleMoves(board);
-  let possiblesGameBoards = getPossiblesGameBoards(board, "O");
+  if(board[1][1] == ""){
+    make_move(1,1, "O");
+    return
+  }
+  let IAmove_and_board = next_player_move_and_board(board, "O");
+  if(hasEmptyCells(IAmove_and_board[1])){
+    let XNext_move_and_board = next_player_move_and_board(IAmove_and_board[1], "X");
+    if(!hasEmptyCells(XNext_move_and_board[1])){
+      IAmove_and_board = XNext_move_and_board;
+    }
+  
+  }
+    make_move(IAmove_and_board[0][0], IAmove_and_board[0][1], "O");
+  }
+function next_player_move_and_board(gboard, player){
+  let player_move = getBestMove(gboard, player);
+  let player_newMove_board = JSON.parse(JSON.stringify(gboard));
+  player_newMove_board[player_move[0]][player_move[1]] = player;
+  return [player_move, player_newMove_board];
+}
+function getBestMove(gboard, player){
+  gboard = JSON.parse(JSON.stringify(gboard));
+  let possiblesmoves = getPossibleMoves(gboard);
+  let moveScores = min_move_scores(gboard, player);
+  let maxScore = player == "X" ? Math.min(...moveScores) : Math.max(...moveScores);
+  let maxIndex = moveScores.indexOf(maxScore);
+  return possiblesmoves[maxIndex];
+}
+function min_move_scores(gboard, player) {
+  gboard = JSON.parse(JSON.stringify(gboard));
+  let possiblesmoves = getPossibleMoves(gboard);
+  let possiblesGameBoards = getPossiblesGameBoards(gboard, player);
   let moveScores = [];
   for (let i = 0; i < possiblesmoves.length; i++) {
     let gameboard = possiblesGameBoards[i];
-    let score = getMoveScore(gameboard, "O");
+    let score = getMoveScore(gameboard, player);
     moveScores.push(score);
   }
-  let maxScore = Math.max(...moveScores);
-  let maxIndex = moveScores.indexOf(maxScore);
-  let move = possiblesmoves[maxIndex];
-  make_move(move[0], move[1], "O");
+  return moveScores;
 }
 function getPossibleMoves(IAboard) {
   let possibleMoves = [];
@@ -40,22 +67,27 @@ function getPossiblesGameBoards(IAboard, player) {
   }
   return possiblesGameBoards;
 }
-function hasEmptyCells(gBoard) {
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      if (gBoard[i][j] == "" && !checkWinner(gBoard)) {
-        return true;
-      }
+
+function getBoardScore(gBoard, player) {
+  if (checkWinner(gBoard)) {
+    if (winner == player) {
+      return 1;
     }
+    return -1;
   }
-  return false;
+  return 0;
 }
+
 function getMoveScore(IAboard, player) {
   let possibleGameBoards = getPossiblesGameBoards(IAboard, player);
   let scores = [];
-  for (let i = 0; i < possibleGameBoards.length; i++) {
-    let score = getBoardScore(possibleGameBoards[i], player);
-    scores.push(score);
+  if(possibleGameBoards.length == 0){
+    scores.push(getBoardScore(IAboard, player));
+  }else{
+    for (let i = 0; i < possibleGameBoards.length; i++) {
+      let score = getBoardScore(possibleGameBoards[i], player);
+      scores.push(score);
+    }
   }
   if (
     scores.filter(function (score) {
@@ -75,17 +107,5 @@ function getMoveScore(IAboard, player) {
   return player == "X" ? -1*sum : sum;
 
 }
-function getBoardScore(gBoard, player) {
-  if (checkWinner(gBoard)) {
-    if (winner == player) {
-      return 1;
-    }
-    return -1;
-  }
-  return 0;
-}
-function minimax(gBoard, player) {
-  let possiblesmoves = getPossibleMoves(gBoard);
-  let possiblesGameBoards = getPossiblesGameBoards(gBoard, player);
-}
 
+ 

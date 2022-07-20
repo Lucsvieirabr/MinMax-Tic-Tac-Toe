@@ -26,7 +26,7 @@ function playerClicked(event){
     if(Clickedcell.ctx == ""){
         make_move(Clickedcell.column, Clickedcell.row, timeOf);
     }  
-   if(!hasWon){makeiamove();}
+   if(!hasWon && hasEmptyCells(board)){makeiamove();}
 }
 
 function make_move(column, row, ctx){
@@ -112,3 +112,15 @@ function changeScore(player, reset){
         document.getElementById("scoreO").innerHTML = scoreO;
     }
 }
+
+function hasEmptyCells(gBoard) {
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (gBoard[i][j] == "" && !checkWinner(gBoard)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  
