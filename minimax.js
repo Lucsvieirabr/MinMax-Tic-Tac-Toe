@@ -1,21 +1,25 @@
 function makeiamove() {
-  if(board[1][1] == ""){
-    make_move(1,1, "O");
-    return
-  }
-
+  
   let IAmove_and_board = next_player_move_and_board(board, "O");
   if(hasEmptyCells(IAmove_and_board[1])){
     let XNext_move_and_board = next_player_move_and_board(IAmove_and_board[1], "X");
     if(!hasEmptyCells(XNext_move_and_board[1]) && checkWinner(XNext_move_and_board[1])){
       IAmove_and_board = XNext_move_and_board;
     }
+    if(hasEmptyCells(XNext_move_and_board[1])){
+      let IAmove_and_board2 = next_player_move_and_board(XNext_move_and_board[1], "O");
+      if(!checkWinner(IAmove_and_board2[1])){
+        IAmove_and_board = IAmove_and_board2;
+      }
+  }
+
   
   }
     make_move(IAmove_and_board[0][0], IAmove_and_board[0][1], "O");
   }
 function next_player_move_and_board(gboard, player){
   let player_move = getBestMove(gboard, player);
+  
   let player_newMove_board = JSON.parse(JSON.stringify(gboard));
   player_newMove_board[player_move[0]][player_move[1]] = player;
   return [player_move, player_newMove_board];
