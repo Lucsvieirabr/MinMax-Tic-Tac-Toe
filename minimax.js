@@ -43,7 +43,7 @@ function getPossiblesGameBoards(IAboard, player) {
 function hasEmptyCells(gBoard) {
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      if (gBoard[i][j] == "") {
+      if (gBoard[i][j] == "" && !checkWinner(gBoard)) {
         return true;
       }
     }
@@ -64,16 +64,16 @@ function getMoveScore(IAboard, player) {
   ) {
     for (let i = 0; i < possibleGameBoards.length; i++) {
       if (hasEmptyCells(possibleGameBoards[i])) {
-        getMoveScore(possibleGameBoards[i], player == "X" ? "O" : "X");
+        return getMoveScore(possibleGameBoards[i], player == "X" ? "O" : "X");
       }
     }
   }
  
-  let maxScore = Math.max(...scores);
-  if (maxScore == 1) {
-    return player == "X" ? -1 : 1;
-  }
-  return -1;
+  let sum = scores.reduce(function (a, b) {
+    return a + b;
+  });
+  return player == "X" ? -1*sum : sum;
+
 }
 function getBoardScore(gBoard, player) {
   if (checkWinner(gBoard)) {
