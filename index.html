@@ -30,7 +30,10 @@
     <div class="canvas_div">
         <h1>Tic Tac Toe</h1>
         <canvas id="gameCanvas"></canvas>
-        <button onclick="clearGameBoard()" class="resetBt" style="width: 85px;height: 35px;"> Reset</button>
+        <div class="buttons">
+            <button class="resetBt" onclick="clearGameBoard()">Reset</button>
+            <button class="resetBt" id="IaBt" onclick="changeIAState()">IA Mode</button>
+        </div>
     </div>
 </body>
 </html>

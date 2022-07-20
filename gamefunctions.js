@@ -6,12 +6,16 @@ let scoreO = 0;
 let hasWon = false;
 let winner = "";
 let winnerLineCord;
+let IAMode = true;
 function getMouseCord(event){
     let mouseX = event.clientX - canvas.offsetLeft;
     let mouseY = event.clientY - canvas.offsetTop;
     return {x: mouseX, y: mouseY};
 }
-
+function changeIAState(){
+    IAMode = !IAMode;
+    document.getElementById("IaBt").style.backgroundColor = IAMode? "rgb(42, 227, 79)" : "red";
+}
 function getClickedCell(mouseX, mouseY){
 
     let column = Math.floor(mouseX / wCell);
@@ -25,7 +29,7 @@ function playerClicked(event){
     let Clickedcell = getClickedCell(mouseCord.x, mouseCord.y);
     if(Clickedcell.ctx != ""){return;}
     make_move(Clickedcell.column, Clickedcell.row, timeOf);
-    if(!hasWon && hasEmptyCells(board)){makeiamove();}
+    if(!hasWon && hasEmptyCells(board) && IAMode){makeiamove();}
 }
 
 function make_move(column, row, ctx){
