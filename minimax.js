@@ -51,7 +51,6 @@ function hasEmptyCells(gBoard) {
   return false;
 }
 function getMoveScore(IAboard, player) {
-  player = (player == "X") ? "O" : "X";
   let possibleGameBoards = getPossiblesGameBoards(IAboard, player);
   let scores = [];
   for (let i = 0; i < possibleGameBoards.length; i++) {
