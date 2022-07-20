@@ -3,10 +3,11 @@ function makeiamove() {
     make_move(1,1, "O");
     return
   }
+
   let IAmove_and_board = next_player_move_and_board(board, "O");
   if(hasEmptyCells(IAmove_and_board[1])){
     let XNext_move_and_board = next_player_move_and_board(IAmove_and_board[1], "X");
-    if(!hasEmptyCells(XNext_move_and_board[1])){
+    if(!hasEmptyCells(XNext_move_and_board[1]) && checkWinner(XNext_move_and_board[1])){
       IAmove_and_board = XNext_move_and_board;
     }
   
@@ -75,7 +76,7 @@ function getBoardScore(gBoard, player) {
 }
 
 function getMoveScore(IAboard, player) {
-  let possibleGameBoards = getPossiblesGameBoards(IAboard, player);
+  let possibleGameBoards = getPossiblesGameBoards(IAboard, player=="X"?"O":"X");
   let scores = [];
   if(possibleGameBoards.length == 0){
     scores.push(getBoardScore(IAboard, player));
