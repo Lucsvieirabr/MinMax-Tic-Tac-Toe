@@ -23,10 +23,9 @@ function playerClicked(event){
     if(hasWon){return;}
     let mouseCord = getMouseCord(event);
     let Clickedcell = getClickedCell(mouseCord.x, mouseCord.y);
-    if(Clickedcell.ctx == ""){
-        make_move(Clickedcell.column, Clickedcell.row, timeOf);
-    }  
-   if(!hasWon && hasEmptyCells(board)){makeiamove();}
+    if(Clickedcell.ctx != ""){return;}
+    make_move(Clickedcell.column, Clickedcell.row, timeOf);
+    if(!hasWon && hasEmptyCells(board)){makeiamove();}
 }
 
 function make_move(column, row, ctx){
