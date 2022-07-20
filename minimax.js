@@ -1,8 +1,4 @@
 function makeiamove() {
-  //pegar todos os movimentos possíveis
-  //pegar todos os possíveis gameboards
-  //Fazer o score de cada gameboard
-  //Pegar o gameboard com o maior score
   if(board[1][1] == ""){
     make_move(1,1, "O");
     return
