@@ -6,7 +6,7 @@ function makeiamove() {
   let possiblesmoves = getPossibleMoves(board);
   let possiblesGameBoards = getPossiblesGameBoards(board, "O");
   let moveScores = [];
-  for (i = 0; i < possiblesmoves.length; i++) {
+  for (let i = 0; i < possiblesmoves.length; i++) {
     let gameboard = possiblesGameBoards[i];
     let score = getMoveScore(gameboard, "O");
     moveScores.push(score);
@@ -18,8 +18,8 @@ function makeiamove() {
 }
 function getPossibleMoves(IAboard) {
   let possibleMoves = [];
-  for (i = 0; i < 3; i++) {
-    for (j = 0; j < 3; j++) {
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
       if (IAboard[i][j] == "") {
         possibleMoves.push([i, j]);
       }
@@ -29,8 +29,8 @@ function getPossibleMoves(IAboard) {
 }
 function getPossiblesGameBoards(IAboard, player) {
   let possiblesGameBoards = [];
-  for (i = 0; i < 3; i++) {
-    for (j = 0; j < 3; j++) {
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
       if (IAboard[i][j] == "") {
         let newBoard = JSON.parse(JSON.stringify(IAboard));
         newBoard[i][j] = player;
@@ -41,8 +41,8 @@ function getPossiblesGameBoards(IAboard, player) {
   return possiblesGameBoards;
 }
 function hasEmptyCells(gBoard) {
-  for (i = 0; i < 3; i++) {
-    for (j = 0; j < 3; j++) {
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
       if (gBoard[i][j] == "") {
         return true;
       }
@@ -54,7 +54,7 @@ function getMoveScore(IAboard, player) {
   player = (player == "X") ? "O" : "X";
   let possibleGameBoards = getPossiblesGameBoards(IAboard, player);
   let scores = [];
-  for (i = 0; i < possibleGameBoards.length; i++) {
+  for (let i = 0; i < possibleGameBoards.length; i++) {
     let score = getBoardScore(possibleGameBoards[i], player);
     scores.push(score);
   }
@@ -63,7 +63,7 @@ function getMoveScore(IAboard, player) {
       return score != 0;
     }).length == 0
   ) {
-    for (i = 0; i < possibleGameBoards.length; i++) {
+    for (let i = 0; i < possibleGameBoards.length; i++) {
       if (hasEmptyCells(possibleGameBoards[i])) {
         getMoveScore(possibleGameBoards[i], player == "X" ? "O" : "X");
       }
