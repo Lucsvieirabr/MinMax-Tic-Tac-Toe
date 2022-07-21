@@ -1,37 +1,29 @@
 function makeiamove() {
-  
-  let IAmove_and_board = next_player_move_and_board(board, "O");
-  if(hasEmptyCells(IAmove_and_board[1])){
-    let XNext_move_and_board = next_player_move_and_board(IAmove_and_board[1], "X");
-    if(!hasEmptyCells(XNext_move_and_board[1]) && checkWinner(XNext_move_and_board[1]) && winner == "X"){
-      IAmove_and_board = XNext_move_and_board;
+  let centerMoveBoard = JSON.parse(JSON.stringify(board));
+  let centerScore = ""
+  if(centerMoveBoard[1][1] == ""){
+    centerMoveBoard[1][1] = "O";
+    centerScore = getMoveScore(centerMoveBoard, "O");
+  }
+  let IAmove = getBestMove(board, "O");
+  let gboard = JSON.parse(JSON.stringify(board));
+  gboard[IAmove[0]][IAmove[1]] = "O";
+  let IAscore = getBoardScore(gboard, "O");
+  if(centerScore > IAscore){
+    make_move(1, 1, "O");
+    return;
+  }
+  if(hasEmptyCells(gboard)){
+    let XNext_move = getBestMove(gboard, "X");
+    gboard[XNext_move[0]][XNext_move[1]] = "X";
+    let Xscore = getBoardScore(gboard, "X");
+    if(checkWinner(gboard) && winner == "X" || IAscore < Xscore){
+      IAmove = XNext_move;
     }
   
   } 
-    let scored_move = checkPlayerNextsMoves(IAmove_and_board[1]);
-    if(scored_move == -1){
-      IAmove_and_board = next_player_move_and_board(board, "X");
-    }
-    make_move(IAmove_and_board[0][0], IAmove_and_board[0][1], "O");
+    make_move(IAmove[0], IAmove[1], "O");
   }
-function checkPlayerNextsMoves(gboard){
-  if(!hasEmptyCells(gboard)){return}
-  let xNewmove = next_player_move_and_board(gboard, "X");
-  let oNewmove = hasEmptyCells(xNewmove[1]) ? next_player_move_and_board(xNewmove[1], "O") : xNewmove;
-  if(hasEmptyCells(oNewmove[1])){
-    let xNextmove = next_player_move_and_board(oNewmove[1], "X");
-    if(hasEmptyCells(xNextmove[1])){
-      let xNextmove2 = next_player_move_and_board(xNextmove[1], "X");
-      if(!hasEmptyCells(xNextmove2[1]) && checkWinner(xNextmove2[1]) && winner == "X"){
-        return -1;
-      }
-    }
-    if(!hasEmptyCells(xNextmove[1]) && checkWinner(xNextmove[1]) && winner == "X"){
-      return -1;
-    }
-  }
-  return 1;
-}
 function next_player_move_and_board(gboard, player){
   let player_move = getBestMove(gboard, player);
   
