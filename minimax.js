@@ -9,27 +9,30 @@ function makeiamove() {
   let gboard = JSON.parse(JSON.stringify(board));
   gboard[IAmove[0]][IAmove[1]] = "O";
   let IAscore = getBoardScore(gboard, "O");
-  if(centerScore > IAscore){
+  centerScore = centerScore < 0 ? centerScore*-1 : centerScore;
+  if(centerScore >=IAscore && gboard[1][1] == ""){
     make_move(1, 1, "O");
     return;
   }
   if(hasEmptyCells(gboard)){
     let XNext_move = getBestMove(gboard, "X");
     gboard[XNext_move[0]][XNext_move[1]] = "X";
-    let Xscore = getBoardScore(gboard, "X");
-    if(checkWinner(gboard) && winner == "X" || IAscore < Xscore){
+    let Xscore = getMoveScore(gboard, "X");
+    if(checkWinner(gboard) && winner == "X" || IAscore < Xscore*-1){
       IAmove = XNext_move;
     }
   
   } 
-    make_move(IAmove[0], IAmove[1], "O");
+  let newBoard = JSON.parse(JSON.stringify(board));
+  newBoard[IAmove[0]][IAmove[1]] = "O";
+  let newMovement = getBestMove(newBoard, "X");
+  newBoard[newMovement[0]][newMovement[1]] = "X";
+  let newScore = getBoardScore(newBoard, "X");
+  if(newScore > IAscore){
+    make_move(newMovement[0], newMovement[1], "O");
+    return;
   }
-function next_player_move_and_board(gboard, player){
-  let player_move = getBestMove(gboard, player);
-  
-  let player_newMove_board = JSON.parse(JSON.stringify(gboard));
-  player_newMove_board[player_move[0]][player_move[1]] = player;
-  return [player_move, player_newMove_board];
+  make_move(IAmove[0], IAmove[1], "O");
 }
 function getBestMove(gboard, player){
   gboard = JSON.parse(JSON.stringify(gboard));
@@ -87,7 +90,13 @@ function getBoardScore(gBoard, player) {
 }
 
 function getMoveScore(IAboard, player) {
-  let possibleGameBoards = getPossiblesGameBoards(IAboard, player=="X"?"O":"X");
+  let possibleGameBoards;
+  if(hasEmptyCells(IAboard)){
+    possibleGameBoards = getPossiblesGameBoards(IAboard, player=="X"?"O":"X");
+  }
+  else{
+    possibleGameBoards = [IAboard];
+  }
   let scores = [];
   if(possibleGameBoards.length == 0){
     scores.push(getBoardScore(IAboard, player));
