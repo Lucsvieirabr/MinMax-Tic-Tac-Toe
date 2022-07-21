@@ -45,6 +45,7 @@ function clearGameBoard(){
     hasWon = false;
     drawn_Setup_BoardGame();
     winner = "";
+    movesCount = 0;
     board = [
         ["", "", ""],
         ["", "", ""],

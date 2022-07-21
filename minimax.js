@@ -1,6 +1,10 @@
 function makeiamove() {
   let centerMoveBoard = JSON.parse(JSON.stringify(board));
-  let centerScore = ""
+  let centerScore = "";
+  if(movesCount ==1 && board[1][2] == "X"){
+    make_move(0, 2, "O");
+    return;
+  }
   if(centerMoveBoard[1][1] == ""){
     centerMoveBoard[1][1] = "O";
     centerScore = getMoveScore(centerMoveBoard, "O");
