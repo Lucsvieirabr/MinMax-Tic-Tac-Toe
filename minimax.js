@@ -3,20 +3,35 @@ function makeiamove() {
   let IAmove_and_board = next_player_move_and_board(board, "O");
   if(hasEmptyCells(IAmove_and_board[1])){
     let XNext_move_and_board = next_player_move_and_board(IAmove_and_board[1], "X");
-    if(!hasEmptyCells(XNext_move_and_board[1]) && checkWinner(XNext_move_and_board[1])){
+    if(!hasEmptyCells(XNext_move_and_board[1]) && checkWinner(XNext_move_and_board[1]) && winner == "X"){
       IAmove_and_board = XNext_move_and_board;
     }
-    if(hasEmptyCells(XNext_move_and_board[1])){
-      let IAmove_and_board2 = next_player_move_and_board(XNext_move_and_board[1], "O");
-      if(!checkWinner(IAmove_and_board2[1])){
-        IAmove_and_board = IAmove_and_board2;
-      }
-  }
-
   
-  }
+  } 
+    let scored_move = checkPlayerNextsMoves(IAmove_and_board[1]);
+    if(scored_move == -1){
+      IAmove_and_board = next_player_move_and_board(board, "X");
+    }
     make_move(IAmove_and_board[0][0], IAmove_and_board[0][1], "O");
   }
+function checkPlayerNextsMoves(gboard){
+  if(!hasEmptyCells(gboard)){return}
+  let xNewmove = next_player_move_and_board(gboard, "X");
+  let oNewmove = hasEmptyCells(xNewmove[1]) ? next_player_move_and_board(xNewmove[1], "O") : xNewmove;
+  if(hasEmptyCells(oNewmove[1])){
+    let xNextmove = next_player_move_and_board(oNewmove[1], "X");
+    if(hasEmptyCells(xNextmove[1])){
+      let xNextmove2 = next_player_move_and_board(xNextmove[1], "X");
+      if(!hasEmptyCells(xNextmove2[1]) && checkWinner(xNextmove2[1]) && winner == "X"){
+        return -1;
+      }
+    }
+    if(!hasEmptyCells(xNextmove[1]) && checkWinner(xNextmove[1]) && winner == "X"){
+      return -1;
+    }
+  }
+  return 1;
+}
 function next_player_move_and_board(gboard, player){
   let player_move = getBestMove(gboard, player);
   
