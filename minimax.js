@@ -28,6 +28,7 @@ function makeiamove() {
   let newMovement = getBestMove(newBoard, "X");
   newBoard[newMovement[0]][newMovement[1]] = "X";
   let newScore = getBoardScore(newBoard, "X");
+  let newMovement2 = getBestMove(newBoard, "X");
   if(newScore > IAscore){
     make_move(newMovement[0], newMovement[1], "O");
     return;
@@ -92,7 +93,7 @@ function getBoardScore(gBoard, player) {
 function getMoveScore(IAboard, player) {
   let possibleGameBoards;
   if(hasEmptyCells(IAboard)){
-    possibleGameBoards = getPossiblesGameBoards(IAboard, player=="X"?"O":"X");
+    possibleGameBoards = getPossiblesGameBoards(IAboard);
   }
   else{
     possibleGameBoards = [IAboard];
