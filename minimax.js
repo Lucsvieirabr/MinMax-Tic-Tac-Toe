@@ -1,47 +1,42 @@
 function makeiamove() {
-  let centerMoveBoard = JSON.parse(JSON.stringify(board));
-  let centerScore = "";
-  if(movesCount ==1 && board[1][2] == "X"){
-    make_move(0, 2, "O");
-    return;
-  }
-  if(centerMoveBoard[1][1] == ""){
-    centerMoveBoard[1][1] = "O";
-    centerScore = getMoveScore(centerMoveBoard, "O");
+  if(board[0][0] == "X" || board[0][2] == "X" || board[2][0] == "X" || board[2][2] == "X"){
+    if(board[1][1] == ""){
+      make_move(1, 1, "O");
+      return
+    }
   }
   let IAmove = getBestMove(board, "O");
+  console.log(IAmove);
   let gboard = JSON.parse(JSON.stringify(board));
   gboard[IAmove[0]][IAmove[1]] = "O";
-  let IAscore = getBoardScore(gboard, "O");
-  centerScore = centerScore < 0 ? centerScore*-1 : centerScore;
-  if(centerScore >=IAscore && gboard[1][1] == ""){
-    make_move(1, 1, "O");
-    return;
-  }
   if(hasEmptyCells(gboard)){
-    let XNext_move = getBestMove(gboard, "X");
-    gboard[XNext_move[0]][XNext_move[1]] = "X";
-    let Xscore = getMoveScore(gboard, "X");
-    if(checkWinner(gboard) && winner == "X" || IAscore < Xscore*-1){
-      IAmove = XNext_move;
+    if(XWinNextTurn(gboard)){
+      IAmove = getBestMove(board, "X");
     }
-  
   } 
-  let newBoard = JSON.parse(JSON.stringify(board));
-  newBoard[IAmove[0]][IAmove[1]] = "O";
-  let newMovement = getBestMove(newBoard, "X");
-  newBoard[newMovement[0]][newMovement[1]] = "X";
-  let newScore = getBoardScore(newBoard, "X");
-  let newMovement2 = getBestMove(newBoard, "X");
-  if(newScore > IAscore){
-    make_move(newMovement[0], newMovement[1], "O");
-    return;
-  }
   make_move(IAmove[0], IAmove[1], "O");
+}
+
+function XWinNextTurn(gBoard) {
+  let XNext_move = getBestMove(gBoard, "X");
+  if(!XNext_move){return false;}
+  gBoard[XNext_move[0]][XNext_move[1]] = "X";
+  if(checkWinner(gBoard)){
+    return true;
+  }
+  return false;
 }
 function getBestMove(gboard, player){
   gboard = JSON.parse(JSON.stringify(gboard));
   let possiblesmoves = getPossibleMoves(gboard);
+  let possiblesGameBoards = getPossiblesGameBoards(gboard, player);
+  for (let i = 0; i < possiblesmoves.length; i++) {
+    if(checkWinner(possiblesGameBoards[i])){
+      if(winner == player){
+        return possiblesmoves[i];
+      }
+    }
+  }
   let moveScores = min_move_scores(gboard, player);
   let maxScore = player == "X" ? Math.min(...moveScores) : Math.max(...moveScores);
   let maxIndex = moveScores.indexOf(maxScore);
@@ -54,7 +49,7 @@ function min_move_scores(gboard, player) {
   let moveScores = [];
   for (let i = 0; i < possiblesmoves.length; i++) {
     let gameboard = possiblesGameBoards[i];
-    let score = getMoveScore(gameboard, player);
+    let score = getMoveScore(gameboard, player, 0);
     moveScores.push(score);
   }
   return moveScores;
@@ -94,15 +89,16 @@ function getBoardScore(gBoard, player) {
   return 0;
 }
 
-function getMoveScore(IAboard, player) {
+function getMoveScore(IAboard, player, depth) {
   let possibleGameBoards;
+  let scores = [];
   if(hasEmptyCells(IAboard)){
     possibleGameBoards = getPossiblesGameBoards(IAboard);
   }
   else{
-    possibleGameBoards = [IAboard];
+    let score = getBoardScore(IAboard, player);
+    return getFinalScore([score], player, depth);
   }
-  let scores = [];
   if(possibleGameBoards.length == 0){
     scores.push(getBoardScore(IAboard, player));
   }else{
@@ -118,16 +114,18 @@ function getMoveScore(IAboard, player) {
   ) {
     for (let i = 0; i < possibleGameBoards.length; i++) {
       if (hasEmptyCells(possibleGameBoards[i])) {
-        return getMoveScore(possibleGameBoards[i], player == "X" ? "O" : "X");
+        return getMoveScore(possibleGameBoards[i], player == "X" ? "O" : "X", depth + 1);
       }
     }
   }
  
-  let sum = scores.reduce(function (a, b) {
-    return a + b;
-  });
-  return player == "X" ? -1*sum : sum;
+  return getFinalScore(scores,player,depth);
 
 }
 
- 
+function getFinalScore(scores,player, depth){
+  let sum = scores.reduce(function (a, b) {
+    return a + b;
+  });
+  return player == "X" ? -1*sum / depth : sum +  depth;
+}
