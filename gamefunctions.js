@@ -119,9 +119,10 @@ function changeScore(player, reset){
 }
 
 function hasEmptyCells(gBoard) {
+    if(checkWinner(gBoard)){return false;}
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
-        if (gBoard[i][j] == "" && !checkWinner(gBoard)) {
+        if (gBoard[i][j] == "") {
           return true;
         }
       }

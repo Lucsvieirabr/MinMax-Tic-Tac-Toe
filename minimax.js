@@ -1,7 +1,9 @@
 function makeiamove() {
   if(board[2][0] == "X" && board[1][1] == "" || board[2][2] == "X" && board[1][1] == "") {
-    make_move(1, 1, "O");
-    return
+    if(movesCount == 1){
+      make_move(1, 1, "O");
+      return
+    }
   }
   let IAmove = getBestMove(board, "O");
   let gboard = JSON.parse(JSON.stringify(board));
@@ -35,13 +37,6 @@ function getBestMove(gboard, player){
   gboard = JSON.parse(JSON.stringify(gboard));
   let possiblesmoves = getPossibleMoves(gboard);
   let possiblesGameBoards = getPossiblesGameBoards(gboard, player);
-  for (let i = 0; i < possiblesmoves.length; i++) {
-    if(checkWinner(possiblesGameBoards[i])){
-      if(winner == player){
-        return possiblesmoves[i];
-      }
-    }
-  }
   let moveScores = min_move_scores(gboard, player);
   let maxScore = Math.max(...moveScores);
   let maxIndex = moveScores.indexOf(maxScore);
@@ -72,6 +67,7 @@ function getPossibleMoves(IAboard) {
 }
 function getPossiblesGameBoards(IAboard, player) {
   let possiblesGameBoards = [];
+  if(!hasEmptyCells(IAboard)){return false;}
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       if (IAboard[i][j] == "") {
@@ -94,43 +90,29 @@ function getBoardScore(gBoard, player) {
   return 0;
 }
 
-function minimax(IAboard, player, depth) {
-  let possibleGameBoards;
-  let scores = [];
-  if(hasEmptyCells(IAboard)){
-    possibleGameBoards = getPossiblesGameBoards(IAboard);
-  }
-  else{
-    let score = getBoardScore(IAboard, player);
-    return getFinalScore([score],depth);
-  }
-  if(possibleGameBoards.length == 0){
+function minimax(IAboard, player, depth, scores) {
+  scores = scores || [];
+  if(!hasEmptyCells(IAboard)){
     scores.push(getBoardScore(IAboard, player));
-  }else{
-    for (let i = 0; i < possibleGameBoards.length; i++) {
-      let score = getBoardScore(possibleGameBoards[i], player);
-      scores.push(score);
+    return getFinalScore(scores, depth);}
+  let possibleGameBoards = getPossiblesGameBoards(IAboard);
+  possibleGameBoards = possibleGameBoards? possibleGameBoards : [IAboard];
+  for (let i = 0; i < possibleGameBoards.length; i++) {
+    let score = getBoardScore(possibleGameBoards[i], player);
+    scores.push(score);
+  }
+  for (let i = 0; i < possibleGameBoards.length; i++) {
+    if (hasEmptyCells(possibleGameBoards[i])) {
+      return minimax(possibleGameBoards[i], player == "X" ? "O" : "X", depth + 1, scores);
     }
   }
-  if (
-    scores.filter(function (score) {
-      return score != 0;
-    }).length == 0
-  ) {
-    for (let i = 0; i < possibleGameBoards.length; i++) {
-      if (hasEmptyCells(possibleGameBoards[i])) {
-        return minimax(possibleGameBoards[i], player == "X" ? "O" : "X", depth + 1);
-      }
-    }
-  }
- 
-  return getFinalScore(scores,depth);
+  return getFinalScore(scores,depth, player);
 
 }
 
-function getFinalScore(scores, depth){
+function getFinalScore(scores, depth, player){
   let sum = scores.reduce(function (a, b) {
     return a + b;
   });
-  return sum /  depth;
+  return player =="X"? sum /depth * -1 : sum /  depth;
 }
