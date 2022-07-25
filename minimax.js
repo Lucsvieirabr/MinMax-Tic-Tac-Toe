@@ -1,5 +1,5 @@
 function makeiamove() {
-  if(board[2][0] == "X" && board[1][1] == "" || board[2][2] == "X" && board[1][1] == "") {
+  if(board[2][0] == "X" && board[1][1] == "" || board[2][2] == "X" && board[1][1] == "" || board[0][0] == "X" && board[1][1] == "" || board[0][2] == "X" && board[1][1] == "") {
     if(movesCount == 1){
       make_move(1, 1, "O");
       return
