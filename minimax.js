@@ -1,17 +1,72 @@
 function makeiamove() {
-  if(board[2][0] == "X" && board[1][1] == "" || board[2][2] == "X" && board[1][1] == "" || board[0][0] == "X" && board[1][1] == "" || board[0][2] == "X" && board[1][1] == "") {
-    if(movesCount == 1){
+  let IAmove = getBestMove(board, "O");
+  let IaMoveScore = moveScore(board, "O");
+  let gboard = JSON.parse(JSON.stringify(board));
+  if(board[2][0] == "X" || board[0][0] == "X" || board[2][2] == "X" || board[0][2] == "X") {
+    if(movesCount == 1 && board[1][1] == "") {
       make_move(1, 1, "O");
       return
     }
+    if(board[2][0] == "X" && gboard[1][0] == "") {
+      gboard[1][0] = "O";
+      if(getBoardScore(gboard, "O") == 1) {
+        make_move(1, 0, "O");
+        return
+      }
+      let nScore = moveScore(gboard, "O");
+      gboard[1][0] = "";
+      if(nScore > IaMoveScore) {
+        make_move(1, 0, "O");
+        return
+      }
+    }
+    if(board[0][0] == "X" && gboard[0][1] == "") {
+      gboard[0][1] = "O";
+      if(getBoardScore(gboard, "O") == 1) {
+        make_move(0, 1, "O");
+        return
+      }
+      let nScore = moveScore(gboard, "O");
+      gboard[0][1] = "";
+      if(nScore > IaMoveScore) {
+        make_move(0, 1, "O");
+        return
+      }
+    }
+    if(board[2][2] == "X" &&  gboard[2][1] == "") {
+      gboard[2][1] = "O";
+      if(getBoardScore(gboard, "O") == 1) {
+        make_move(2, 1, "O");
+        return
+      }
+      let nScore = moveScore(gboard, "O");
+      gboard[2][1] = "";
+      if(nScore > IaMoveScore) {
+        make_move(2, 1, "O");
+        return
+      }
+    }
+
+    if(board[0][2] == "X" && gboard[1][2] == "") {
+      gboard[1][2] = "O";
+      if(getBoardScore(gboard, "O") == 1) {
+        make_move(1, 2, "O");
+        return
+      }
+      let nScore = moveScore(gboard, "O");
+      gboard[1][2] = "";
+      if(nScore > IaMoveScore) {
+        make_move(1, 2, "O");
+        return
+      }
+    }
+    
   }
-  let IAmove = getBestMove(board, "O");
-  let gboard = JSON.parse(JSON.stringify(board));
   gboard[IAmove[0]][IAmove[1]] = "O";
   if(hasEmptyCells(gboard)){
-    let XMoveScore = moveScore(gboard, "X");
-    let IaMoveScore = moveScore(gboard, "O");
+    let XMoveScore = moveScore(board, "X");
     if(XWinNextTurn(gboard) || IaMoveScore < XMoveScore){
+      console.log("I am making a move");
       IAmove = getBestMove(board, "X");
     }
   } 
@@ -36,7 +91,6 @@ function XWinNextTurn(gBoard) {
 function getBestMove(gboard, player){
   gboard = JSON.parse(JSON.stringify(gboard));
   let possiblesmoves = getPossibleMoves(gboard);
-  let possiblesGameBoards = getPossiblesGameBoards(gboard, player);
   let moveScores = min_move_scores(gboard, player);
   let maxScore = Math.max(...moveScores);
   let maxIndex = moveScores.indexOf(maxScore);
