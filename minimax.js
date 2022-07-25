@@ -1,20 +1,25 @@
 function makeiamove() {
-  if(board[0][0] == "X" || board[0][2] == "X" || board[2][0] == "X" || board[2][2] == "X"){
-    if(board[1][1] == ""){
-      make_move(1, 1, "O");
-      return
-    }
+  if(board[2][0] == "X" && board[1][1] == "" || board[2][2] == "X" && board[1][1] == "") {
+    make_move(1, 1, "O");
+    return
   }
   let IAmove = getBestMove(board, "O");
-  console.log(IAmove);
   let gboard = JSON.parse(JSON.stringify(board));
   gboard[IAmove[0]][IAmove[1]] = "O";
   if(hasEmptyCells(gboard)){
-    if(XWinNextTurn(gboard)){
+    let XMoveScore = moveScore(gboard, "X");
+    let IaMoveScore = moveScore(gboard, "O");
+    if(XWinNextTurn(gboard) || IaMoveScore < XMoveScore){
       IAmove = getBestMove(board, "X");
     }
   } 
   make_move(IAmove[0], IAmove[1], "O");
+}
+
+function moveScore(gboard, player){
+  let playerScore = min_move_scores(gboard, player);
+  let maxScore = Math.max(...playerScore);
+  return maxScore;
 }
 
 function XWinNextTurn(gBoard) {
@@ -38,7 +43,7 @@ function getBestMove(gboard, player){
     }
   }
   let moveScores = min_move_scores(gboard, player);
-  let maxScore = player == "X" ? Math.min(...moveScores) : Math.max(...moveScores);
+  let maxScore = Math.max(...moveScores);
   let maxIndex = moveScores.indexOf(maxScore);
   return possiblesmoves[maxIndex];
 }
@@ -49,7 +54,7 @@ function min_move_scores(gboard, player) {
   let moveScores = [];
   for (let i = 0; i < possiblesmoves.length; i++) {
     let gameboard = possiblesGameBoards[i];
-    let score = getMoveScore(gameboard, player, 0);
+    let score = minimax(gameboard, player, 1);
     moveScores.push(score);
   }
   return moveScores;
@@ -89,7 +94,7 @@ function getBoardScore(gBoard, player) {
   return 0;
 }
 
-function getMoveScore(IAboard, player, depth) {
+function minimax(IAboard, player, depth) {
   let possibleGameBoards;
   let scores = [];
   if(hasEmptyCells(IAboard)){
@@ -97,7 +102,7 @@ function getMoveScore(IAboard, player, depth) {
   }
   else{
     let score = getBoardScore(IAboard, player);
-    return getFinalScore([score], player, depth);
+    return getFinalScore([score],depth);
   }
   if(possibleGameBoards.length == 0){
     scores.push(getBoardScore(IAboard, player));
@@ -114,18 +119,18 @@ function getMoveScore(IAboard, player, depth) {
   ) {
     for (let i = 0; i < possibleGameBoards.length; i++) {
       if (hasEmptyCells(possibleGameBoards[i])) {
-        return getMoveScore(possibleGameBoards[i], player == "X" ? "O" : "X", depth + 1);
+        return minimax(possibleGameBoards[i], player == "X" ? "O" : "X", depth + 1);
       }
     }
   }
  
-  return getFinalScore(scores,player,depth);
+  return getFinalScore(scores,depth);
 
 }
 
-function getFinalScore(scores,player, depth){
+function getFinalScore(scores, depth){
   let sum = scores.reduce(function (a, b) {
     return a + b;
   });
-  return player == "X" ? -1*sum / depth : sum +  depth;
+  return sum /  depth;
 }
