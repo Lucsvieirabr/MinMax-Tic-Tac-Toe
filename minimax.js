@@ -3,10 +3,10 @@ function makeiamove() {
   let IaMoveScore = moveScore(board, "O");
   let gboard = JSON.parse(JSON.stringify(board));
   gboard[IAmove[0]][IAmove[1]] = "O";
+  
   if(hasEmptyCells(gboard)){
     let XMoveScore = moveScore(board, "X");
-    if(XWinNextTurn(gboard) || IaMoveScore < XMoveScore){
-      console.log("I am making a move");
+    if(XWinNextTurn(gboard)|| IaMoveScore < XMoveScore){
       IAmove = getBestMove(board, "X");
     }
   } 
@@ -85,11 +85,7 @@ function getBoardScore(gBoard, player) {
 }
 
 function minimax(IAboard, player, depth, scores) {
-  scores = scores || [getBoardScore(IAboard, player)];
-
-  if(!hasEmptyCells(IAboard)){
-    return getFinalScore(scores, depth);
-  }
+  scores = scores || [getBoardScore(IAboard, player)]; 
 
   let possiblesGameBoards = getPossiblesGameBoards(IAboard) || [IAboard];
   scores.push(...score_all_GameBoards(possiblesGameBoards, player));
@@ -98,8 +94,7 @@ function minimax(IAboard, player, depth, scores) {
       return minimax(possiblesGameBoards[i], player == "X" ? "O" : "X", depth + 1, scores);
     }
   }
-  return getFinalScore(scores,depth, player);
-
+  return getFinalScore(scores, depth);
 }
 
 function score_all_GameBoards(gBoards, player) {
