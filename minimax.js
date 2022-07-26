@@ -2,66 +2,6 @@ function makeiamove() {
   let IAmove = getBestMove(board, "O");
   let IaMoveScore = moveScore(board, "O");
   let gboard = JSON.parse(JSON.stringify(board));
-  if(board[2][0] == "X" || board[0][0] == "X" || board[2][2] == "X" || board[0][2] == "X") {
-    if(movesCount == 1 && board[1][1] == "") {
-      make_move(1, 1, "O");
-      return
-    }
-    if(board[2][0] == "X" && gboard[1][0] == "") {
-      gboard[1][0] = "O";
-      if(getBoardScore(gboard, "O") == 1) {
-        make_move(1, 0, "O");
-        return
-      }
-      let nScore = moveScore(gboard, "O");
-      gboard[1][0] = "";
-      if(nScore > IaMoveScore) {
-        make_move(1, 0, "O");
-        return
-      }
-    }
-    if(board[0][0] == "X" && gboard[0][1] == "") {
-      gboard[0][1] = "O";
-      if(getBoardScore(gboard, "O") == 1) {
-        make_move(0, 1, "O");
-        return
-      }
-      let nScore = moveScore(gboard, "O");
-      gboard[0][1] = "";
-      if(nScore > IaMoveScore) {
-        make_move(0, 1, "O");
-        return
-      }
-    }
-    if(board[2][2] == "X" &&  gboard[2][1] == "") {
-      gboard[2][1] = "O";
-      if(getBoardScore(gboard, "O") == 1) {
-        make_move(2, 1, "O");
-        return
-      }
-      let nScore = moveScore(gboard, "O");
-      gboard[2][1] = "";
-      if(nScore > IaMoveScore) {
-        make_move(2, 1, "O");
-        return
-      }
-    }
-
-    if(board[0][2] == "X" && gboard[1][2] == "") {
-      gboard[1][2] = "O";
-      if(getBoardScore(gboard, "O") == 1) {
-        make_move(1, 2, "O");
-        return
-      }
-      let nScore = moveScore(gboard, "O");
-      gboard[1][2] = "";
-      if(nScore > IaMoveScore) {
-        make_move(1, 2, "O");
-        return
-      }
-    }
-    
-  }
   gboard[IAmove[0]][IAmove[1]] = "O";
   if(hasEmptyCells(gboard)){
     let XMoveScore = moveScore(board, "X");
@@ -145,23 +85,30 @@ function getBoardScore(gBoard, player) {
 }
 
 function minimax(IAboard, player, depth, scores) {
-  scores = scores || [];
+  scores = scores || [getBoardScore(IAboard, player)];
+
   if(!hasEmptyCells(IAboard)){
-    scores.push(getBoardScore(IAboard, player));
-    return getFinalScore(scores, depth);}
-  let possibleGameBoards = getPossiblesGameBoards(IAboard);
-  possibleGameBoards = possibleGameBoards? possibleGameBoards : [IAboard];
-  for (let i = 0; i < possibleGameBoards.length; i++) {
-    let score = getBoardScore(possibleGameBoards[i], player);
-    scores.push(score);
+    return getFinalScore(scores, depth);
   }
-  for (let i = 0; i < possibleGameBoards.length; i++) {
-    if (hasEmptyCells(possibleGameBoards[i])) {
-      return minimax(possibleGameBoards[i], player == "X" ? "O" : "X", depth + 1, scores);
+
+  let possiblesGameBoards = getPossiblesGameBoards(IAboard) || [IAboard];
+  scores.push(...score_all_GameBoards(possiblesGameBoards, player));
+  for (let i = 0; i < possiblesGameBoards.length; i++) {
+    if (hasEmptyCells(possiblesGameBoards[i])) {
+      return minimax(possiblesGameBoards[i], player == "X" ? "O" : "X", depth + 1, scores);
     }
   }
   return getFinalScore(scores,depth, player);
 
+}
+
+function score_all_GameBoards(gBoards, player) {
+  let scores = [];
+  for (let i = 0; i < gBoards.length; i++) {
+    let score = getBoardScore(gBoards[i], player);
+    scores.push(score);
+  }
+  return scores;
 }
 
 function getFinalScore(scores, depth, player){
