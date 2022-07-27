@@ -2,10 +2,11 @@ function makeiamove() {
   let IAmove = getBestMove(board, "O");
   let IaMoveScore = moveScore(board, "O");
   let gboard = JSON.parse(JSON.stringify(board));
+  gboard[IAmove[0]][IAmove[1]] = "O";
   
   if(hasEmptyCells(gboard)){
     let XMoveScore = moveScore(board, "X");
-    if(XWinNextTurn(gboard) && IaMoveScore < XMoveScore){
+    if(XWinNextTurn(gboard)|| IaMoveScore < XMoveScore){
       IAmove = getBestMove(board, "X");
     }
   } 
@@ -85,7 +86,7 @@ function getBoardScore(gBoard, player) {
 
 function minimax(IAboard, player, depth, scores) {
   scores = scores || [getBoardScore(IAboard, player)]; 
-  
+
   let possiblesGameBoards = getPossiblesGameBoards(IAboard) || [IAboard];
   scores.push(...score_all_GameBoards(possiblesGameBoards, player));
   for (let i = 0; i < possiblesGameBoards.length; i++) {
