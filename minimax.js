@@ -1,22 +1,14 @@
 function makeiamove() {
   let IAmove = getBestMove(board, "O");
-  let IaMoveScore = moveScore(board, "O");
   let gboard = JSON.parse(JSON.stringify(board));
   gboard[IAmove[0]][IAmove[1]] = "O";
   
   if(hasEmptyCells(gboard)){
-    let XMoveScore = moveScore(board, "X");
-    if(XWinNextTurn(gboard)|| IaMoveScore < XMoveScore){
+    if(XWinNextTurn(gboard)){
       IAmove = getBestMove(board, "X");
     }
   } 
   make_move(IAmove[0], IAmove[1], "O");
-}
-
-function moveScore(gboard, player){
-  let playerScore = min_move_scores(gboard, player);
-  let maxScore = Math.max(...playerScore);
-  return maxScore;
 }
 
 function XWinNextTurn(gBoard) {
@@ -29,25 +21,40 @@ function XWinNextTurn(gBoard) {
   return false;
 }
 function getBestMove(gboard, player){
-  gboard = JSON.parse(JSON.stringify(gboard));
-  let possiblesmoves = getPossibleMoves(gboard);
-  let moveScores = min_move_scores(gboard, player);
-  let maxScore = Math.max(...moveScores);
-  let maxIndex = moveScores.indexOf(maxScore);
-  return possiblesmoves[maxIndex];
-}
-function min_move_scores(gboard, player) {
-  gboard = JSON.parse(JSON.stringify(gboard));
+  gboard = copy_game_board(gboard);
   let possiblesmoves = getPossibleMoves(gboard);
   let possiblesGameBoards = getPossiblesGameBoards(gboard, player);
+  let moveScores = get_moves_scores(possiblesGameBoards, player);
+  let bestScore = Math.max(...moveScores);
+  let maxIndex = moveScores.indexOf(bestScore);
+  return possiblesmoves[maxIndex];
+}
+
+function get_moves_scores(possiblesGameBoards, player) {
   let moveScores = [];
-  for (let i = 0; i < possiblesmoves.length; i++) {
-    let gameboard = possiblesGameBoards[i];
-    let score = minimax(gameboard, player, 1);
-    moveScores.push(score);
+  for (let i = 0; i < possiblesGameBoards.length; i++) {
+    let moveScore = minimax(possiblesGameBoards[i], player, 1);
+    moveScores.push(moveScore);
   }
   return moveScores;
 }
+function minimax(IAboard, player, depth, scores) {
+  scores = scores || [getBoardScore(IAboard, player)]; 
+  let possiblesGameBoards = getPossiblesGameBoards(IAboard) || [IAboard];
+  scores.push(...score_all_GameBoards(possiblesGameBoards, player));
+  for (let i = 0; i < possiblesGameBoards.length; i++) {
+    if (hasEmptyCells(possiblesGameBoards[i])) {
+      return minimax(possiblesGameBoards[i], player == "X" ? "O" : "X", depth + 1, scores);
+    }
+  }
+  return getFinalScore(scores, depth);
+}
+
+function copy_game_board(gboard) {
+  return JSON.parse(JSON.stringify(gboard));
+}
+
+
 function getPossibleMoves(IAboard) {
   let possibleMoves = [];
   for (let i = 0; i < 3; i++) {
@@ -59,13 +66,15 @@ function getPossibleMoves(IAboard) {
   }
   return possibleMoves;
 }
+
+
 function getPossiblesGameBoards(IAboard, player) {
   let possiblesGameBoards = [];
   if(!hasEmptyCells(IAboard)){return false;}
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       if (IAboard[i][j] == "") {
-        let newBoard = JSON.parse(JSON.stringify(IAboard));
+        let newBoard = copy_game_board(IAboard);
         newBoard[i][j] = player;
         possiblesGameBoards.push(newBoard);
       }
@@ -84,19 +93,6 @@ function getBoardScore(gBoard, player) {
   return 0;
 }
 
-function minimax(IAboard, player, depth, scores) {
-  scores = scores || [getBoardScore(IAboard, player)]; 
-
-  let possiblesGameBoards = getPossiblesGameBoards(IAboard) || [IAboard];
-  scores.push(...score_all_GameBoards(possiblesGameBoards, player));
-  for (let i = 0; i < possiblesGameBoards.length; i++) {
-    if (hasEmptyCells(possiblesGameBoards[i])) {
-      return minimax(possiblesGameBoards[i], player == "X" ? "O" : "X", depth + 1, scores);
-    }
-  }
-  return getFinalScore(scores, depth);
-}
-
 function score_all_GameBoards(gBoards, player) {
   let scores = [];
   for (let i = 0; i < gBoards.length; i++) {
@@ -110,5 +106,5 @@ function getFinalScore(scores, depth, player){
   let sum = scores.reduce(function (a, b) {
     return a + b;
   });
-  return player =="X"? sum /depth * -1 : sum /  depth;
+  return sum /  depth;
 }
