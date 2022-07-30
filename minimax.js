@@ -1,6 +1,6 @@
 function makeiamove() {
   let IAmove = getBestMove(board, "O");
-  let gboard = JSON.parse(JSON.stringify(board));
+  let gboard = copy_game_board(board);
   gboard[IAmove[0]][IAmove[1]] = "O";
   
   if(hasEmptyCells(gboard)){
