@@ -1,4 +1,5 @@
 function makeiamove() {
+
   let IAmove = getBestMove(board, "O");
   let gboard = copy_game_board(board);
   gboard[IAmove[0]][IAmove[1]] = "O";
@@ -40,7 +41,7 @@ function get_moves_scores(possiblesGameBoards, player) {
 }
 function minimax(IAboard, player, depth, scores) {
   scores = scores || [getBoardScore(IAboard, player)]; 
-  let possiblesGameBoards = getPossiblesGameBoards(IAboard) || [IAboard];
+  let possiblesGameBoards = getPossiblesGameBoards(IAboard, player) || [IAboard];
   scores.push(...score_all_GameBoards(possiblesGameBoards, player));
   for (let i = 0; i < possiblesGameBoards.length; i++) {
     if (hasEmptyCells(possiblesGameBoards[i])) {
@@ -83,9 +84,9 @@ function getPossiblesGameBoards(IAboard, player) {
   return possiblesGameBoards;
 }
 
-function getBoardScore(gBoard, player) {
+function getBoardScore(gBoard) {
   if (checkWinner(gBoard)) {
-    if (winner == player) {
+    if (winner == "O") {
       return 1;
     }
     return -1;
@@ -102,7 +103,7 @@ function score_all_GameBoards(gBoards, player) {
   return scores;
 }
 
-function getFinalScore(scores, depth, player){
+function getFinalScore(scores, depth){
   let sum = scores.reduce(function (a, b) {
     return a + b;
   });
