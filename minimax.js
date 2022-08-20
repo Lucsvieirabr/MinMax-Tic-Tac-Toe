@@ -1,5 +1,9 @@
 function makeiamove() {
-
+  if(board[1][1] == "O" && board[0][1] == ""){
+    if(board[2][0] == "X" || board[0][2] == "X"){
+      return make_move(0, 1, "O");
+    }
+  }
   let IAmove = getBestMove(board, "O");
   let gboard = copy_game_board(board);
   gboard[IAmove[0]][IAmove[1]] = "O";
@@ -46,7 +50,7 @@ function minimax(IAboard, player, depth, scores, alpha) {
   scores.push(...score_all_GameBoards(possiblesGameBoards, player));
   for (let i = 0; i < possiblesGameBoards.length; i++) {
     if (hasEmptyCells(possiblesGameBoards[i])) {
-      return minimax(possiblesGameBoards[i], player == "X" ? "O" : "X", depth + 1, scores, alpha);
+      minimax(possiblesGameBoards[i], player == "X" ? "O" : "X", depth + 1, scores, alpha);
     }
   }
   return getFinalScore(scores, depth);
