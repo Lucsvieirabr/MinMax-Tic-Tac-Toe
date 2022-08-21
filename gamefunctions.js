@@ -7,7 +7,7 @@ let hasWon = false;
 let winner = "";
 let winnerLineCord;
 let IAMode = true;
-let movesCount = 0;
+let isPaused = false;
 function getMouseCord(event){
     let mouseX = event.clientX - canvas.offsetLeft;
     let mouseY = event.clientY - canvas.offsetTop;
@@ -25,12 +25,11 @@ function getClickedCell(mouseX, mouseY){
 }
 
 function playerClicked(event){
-    if(hasWon){return;}
+    if(hasWon || isPaused){return;}
     let mouseCord = getMouseCord(event);
     let Clickedcell = getClickedCell(mouseCord.x, mouseCord.y);
     if(Clickedcell.ctx != ""){return;}
     make_move(Clickedcell.column, Clickedcell.row, timeOf);
-    movesCount++;
     if(!hasWon && hasEmptyCells(board) && IAMode){makeiamove();}
 }
 

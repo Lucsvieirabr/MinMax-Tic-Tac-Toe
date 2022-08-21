@@ -15,15 +15,9 @@ window.onload = function () {
 
 };
 function change_menu_state(state){
-  if(state){
-    document.getElementById("menu").style.display = "block";
-    document.getElementById("menuBt").style.display = "none";
-    document.getElementById("closeBt").style.display = "block";
-    document.getElementById("gameCanvas").style.filter = "blur(5px)";
-    return
-  }
-  document.getElementById("menu").style.display = "none";
-  document.getElementById("menuBt").style.display = "block";
-  document.getElementById("closeBt").style.display = "none";
-  document.getElementById("gameCanvas").style.filter = "blur(0px)";
+  isPaused = state;
+  document.getElementById("menu").style.display = state? "block" : "none";
+  document.getElementById("menuBt").style.display = state? "none" : "block";
+  document.getElementById("closeBt").style.display = state? "block" : "none";
+  document.getElementById("gameCanvas").style.filter = state? "blur(5px)" : "none";
 }
