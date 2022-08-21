@@ -39,13 +39,13 @@ function get_moves_scores(possiblesGameBoards, player) {
   }
   return moveScores;
 }
-function minimax(IAboard, player, depth, scores, alpha) {
+function minimax(IAboard, player, depth, scores) {
   if(!hasEmptyCells(IAboard)){return player == "O"? Infinity : -Infinity;}
   let possiblesGameBoards = getPossiblesGameBoards(IAboard, player) || [IAboard];
   scores.push(...score_all_GameBoards(possiblesGameBoards, player));
   for (let i = 0; i < possiblesGameBoards.length; i++) {
     if (hasEmptyCells(possiblesGameBoards[i])) {
-      minimax(possiblesGameBoards[i], player == "X" ? "O" : "X", depth + 1, scores, alpha);
+      minimax(possiblesGameBoards[i], player == "X" ? "O" : "X", depth + 1, scores);
     }
   }
   return getFinalScore(scores, depth);

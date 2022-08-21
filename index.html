@@ -6,6 +6,7 @@
     <title>Tic Tac Toe IA</title>
     <link rel="icon" href="https://media.istockphoto.com/vectors/tic-tac-toe-game-icon-on-white-background-flat-style-tictactoe-game-vector-id1150889395?b=1&k=20&m=1150889395&s=170667a&w=0&h=RHHLTOPFKmZSws3Eo2a7M9kRZj4GYvDII4DeaEI4t0I=">
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
     <script src="graphic_library.js"></script>
     <script src="gamefunctions.js"></script>
@@ -13,7 +14,7 @@
     <script src='main.js'></script>
 </head>
 <body>
-    <div class="scorecontainer">
+    <div class="scorecontainer" id="menu">
         <h1>Score</h1>
         <div class="scores">
             <div class="player">
@@ -27,6 +28,12 @@
             <button class="resetBt" style="width: 85px;height: 35px;" onclick="clearScore()">Reset</button>
 
         </div>
+    </div>
+    <div id="menuBt">
+        <button class="btn" onclick="change_menu_state(true)"><i class="fa fa-bars"></i></button>
+    </div>
+    <div id="closeBt">
+        <button class="btn" onclick="change_menu_state(false)"><i class="fa fa-close"></i></button>
     </div>
     <div class="canvas_div">
         <h1>Tic Tac Toe</h1>

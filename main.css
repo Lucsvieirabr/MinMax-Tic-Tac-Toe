@@ -60,3 +60,32 @@
 #IaBt{
     background-color: rgb(42, 227, 79);
 }
+#menuBt{
+    display: none;
+}
+#closeBt{
+    display: none;
+}
+.btn{
+  border: none; /* Remove borders */
+  background: none;
+  color: rgb(0, 0, 0); /* White text */
+  padding: 12px 16px; /* Some padding */
+  font-size: 30px; /* Set a font size */
+}
+
+@media screen and (max-width: 1250px){
+    .scorecontainer{
+        width: 70%;
+        height: 40%;
+        top: 30%;
+        left: 14%;
+        align-items: center;
+        justify-content: center;
+        transform: translate(0, 0);
+        display: none;
+    }
+    #menuBt{
+        display: block;
+    }
+}
