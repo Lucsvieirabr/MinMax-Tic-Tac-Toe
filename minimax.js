@@ -34,7 +34,7 @@ function getBestMove(gboard, player){
 function get_moves_scores(possiblesGameBoards, player) {
   let moveScores = [];
   for (let i = 0; i < possiblesGameBoards.length; i++) {
-    let moveScore = minimax(possiblesGameBoards[i], player, 1, [getBoardScore(possiblesGameBoards[i])], player);
+    let moveScore = minimax(possiblesGameBoards[i], player, 1, [getBoardScore(possiblesGameBoards[i])]);
     moveScores.push(moveScore);
   }
   return moveScores;
