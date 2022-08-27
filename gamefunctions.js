@@ -24,13 +24,18 @@ function getClickedCell(mouseX, mouseY){
     return {ctx: board[column][row], column, row};
 }
 
-function playerClicked(event){
+ function playerClicked(event){
     if(hasWon || isPaused){return;}
     let mouseCord = getMouseCord(event);
     let Clickedcell = getClickedCell(mouseCord.x, mouseCord.y);
     if(Clickedcell.ctx != ""){return;}
     make_move(Clickedcell.column, Clickedcell.row, timeOf);
-    if(!hasWon && hasEmptyCells(board) && IAMode){makeiamove();}
+    if(!hasWon && hasEmptyCells(board) && IAMode){
+        document.getElementById("loading").style.display = "grid";
+        makeiamove().then(()=>{
+            document.getElementById("loading").style.display = "none";
+        })
+    }
 }
 
 function make_move(column, row, ctx){

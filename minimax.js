@@ -1,14 +1,17 @@
 function makeiamove() {
 
-  let IAmove = getBestMove(board, "O");
-  let gboard = copy_game_board(board);
-  gboard[IAmove[0]][IAmove[1]] = "O";
-  if(hasEmptyCells(gboard)){
-    if(XWinNextTurn(gboard)){
-      IAmove = getBestMove(gboard, "X");
+  return new Promise(function (resolve, reject) {
+    let IAmove = getBestMove(board, "O");
+    let gboard = copy_game_board(board);
+    gboard[IAmove[0]][IAmove[1]] = "O";
+    if(hasEmptyCells(gboard)){
+      if(XWinNextTurn(gboard)){
+        IAmove = getBestMove(gboard, "X");
+      }
     }
-  }
-  make_move(IAmove[0], IAmove[1], "O");
+    make_move(IAmove[0], IAmove[1], "O");
+    resolve()
+  });
 }
 
 function XWinNextTurn(gBoard) {
